@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "documents": [
+      "adobe_round 1A.pdf",
+      "adobe_round 1B.pdf"
+    ],
+    "persona": "PhD Researcher in Computational Biology",
+    "job": "Prepare a literature review on graph neural networks",
+    "timestamp": "2025-07-28 13:01:45"
+  },
+  "extracted_sections": [
+    {
+      "document": "adobe_round 1A.pdf",
+      "page": 1,
+      "section_title": "<image: DeviceRGB, width: 1203, height: 1859, bpc: 8>...",
+      "importance_rank": 1
+    }
+  ],
+  "sub_section_analysis": [
+    {
+      "document": "adobe_round 1A.pdf",
+      "page": 1,
+      "refined_text": "<image: DeviceRGB, width: 1203, height: 1859, bpc: 8>"
+    }
+  ]
+}
