@@ -1,97 +1,107 @@
-📄 Adobe Challenge 1B – Persona-Based PDF Insight Generator
-Developed by Gajula Lakshmi Naga Varshitha, Gajjarapu Padmaja
+# 📄 Adobe Challenge 1B – Persona-Based PDF Insight Generator
 
-🧠 Problem Statement
+**Developed by:**  
+Gajula Lakshmi Naga Varshitha  
+Gajjarapu Padmaja
+
+---
+
+## 🧠 Problem Statement
+
 Build a system that generates insights from PDFs tailored to a persona and a job role. It should:
 
-Work fully offline
+- Work fully offline  
+- Be CPU-only  
+- Fit under 200MB for code + model  
+- Accept multiple PDFs + a `meta.json` file  
+- Output ranked section insights as structured JSON  
 
-Be CPU-only
+---
 
-Fit under 200MB for code + model
+## ✅ Features
 
-Accept multiple PDFs + a meta.json file
+- Persona-aware relevance ranking  
+- Supports multiple PDFs in batch  
+- Offline embeddings using sentence-transformers  
+- Dockerized and stateless  
+- Outputs structured `.json` to `/output`  
 
-Output ranked section insights as structured JSON
+---
 
-✅ Features
-Persona-aware relevance ranking
+## 📁 Folder Structure
 
-Supports multiple PDFs in batch
-
-Offline embeddings using sentence-transformers
-
-Dockerized and stateless
-
-Outputs structured .json to /output
-
-📁 Folder Structure
-graphql
-Copy
-Edit
 adobe_round1b/
-├── input/                  # Your PDF files + meta.json go here
-├── output/                 # Output JSON files appear here
-├── download_model.py       # One-time model downloader
-├── inference.py            # Main script
-├── utils.py                # Helpers for chunking, similarity, etc.
-├── requirements.txt        # Dependencies
-├── Dockerfile              # Docker image setup
-└── README.md               # You're reading it :)
-🐳 Docker Setup
-Step 1: 🔧 Download the Model (One-Time Setup)
-In your host machine (before Docker):
+├── input/ # Your PDF files + meta.json go here
+├── output/ # Output JSON files appear here
+├── model/ # Folder created after model download
+├── download_model.py # One-time model downloader
+├── Main.py # Main script
+├── utils.py # Helpers for chunking, similarity, etc.
+├── requirements.txt # Dependencies
+├── Dockerfile # Docker image setup
+└── README.md # You're reading it :)
 
-bash
-Copy
-Edit
+---
+
+## 🐳 Docker Setup
+
+### 🔧 Step 1: Download the Model (One-Time Setup)
+
+Before Docker, run this locally (only once):
+
+```bash
 python download_model.py
-✅ This downloads sentence-transformers/all-MiniLM-L6-v2 to a model/ folder.
+```
+---
 
-Step 2: 🛠️ Build the Docker Image
-In the root project directory:
-
-bash
-Copy
-Edit
+### 🛠️ Step 2: Build the Docker Image
+```bash
 docker build --platform linux/amd64 -t round1b:pdfinsight .
-Step 3: 📥 Add Input Files
-Put the following into the input/ folder:
+```
+---
+
+### 📥 Step 3: Add Input Files
+Place the following into the input/ folder:
 
 One or more PDFs (.pdf)
 
 A meta.json file like:
 
-json
-Copy
-Edit
+```json
+
 {
   "persona": "PhD Researcher in Computational Biology",
   "job": "Prepare a literature review on graph neural networks"
 }
-Step 4: 🚀 Run the Docker Container
+```
+---
+## 🚀 Step 4: Run the Docker Container
 PowerShell (recommended):
-bash
-Copy
-Edit
+
+```bash
+
 docker run --rm `
   -v ${PWD}/input:/app/input `
   -v ${PWD}/output:/app/output `
   --network none `
   round1b:pdfinsight
-CMD (Command Prompt):
-cmd
-Copy
-Edit
+  ```
+  ---
+  ### Command Prompt (CMD):
+
+```cmd
+
 docker run --rm ^
   -v %cd%/input:/app/input ^
   -v %cd%/output:/app/output ^
   --network none ^
   round1b:pdfinsight
-🧾 Example Output (output/result.json)
-json
-Copy
-Edit
+  ```
+  ## 🧾 Example Output
+output/result.json:
+
+```json
+
 {
   "metadata": {
     "documents": ["adobe_round 1A.pdf", "adobe_round 1B.pdf"],
@@ -115,25 +125,26 @@ Edit
     }
   ]
 }
-⚙️ How It Works
-inference.py loads PDFs + meta.json
+```
+---
+## ⚙️ How It Works
+- inference.py loads PDFs and meta.json
 
-Splits PDFs into text chunks (1-2 paragraphs)
+- Text is split into chunks (1–2 paragraphs)
 
-Encodes using sentence-transformers
+- Chunks + persona/job text are embedded
 
-Ranks chunks based on cosine similarity to persona+job context
+- Cosine similarity is computed for ranking
 
-Returns top relevant chunks per document
+- Top sections per document are returned in JSON
+---
+## 🧱 Tech Stack
+- Python 3.10-slim
 
-🧱 Tech Stack
-Python 3.10-slim
+- SentenceTransformers 5.0.0
 
-SentenceTransformers 5.0.0
+- PyMuPDF
 
-PyMuPDF
+- Torch (CPU-only)
 
-Torch (CPU-only)
-
-Docker (stateless execution)
-
+- Docker (stateless execution)
